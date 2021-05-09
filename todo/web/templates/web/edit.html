@@ -8,31 +8,33 @@
     <title>{% if todo %}Edit Todo{% else %}Not Found{% endif %}</title>
 </head>
 <body>
-<div class="ContentWrapper">
-    <div class="Content">
-        {% if todo %}
-        <h3>Edit Todo</h3>
-        <div class="EditTodoForm">
-            <form action="{% url 'web:post_edit' todo.id %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="deadline">Deadline</label>
-                    <input type="date" class="form-control" id="deadline" value="{{deadline}}" name="deadline">
-                </div>
-                <div class="form-group">
-                    <label for="progress">Progress</label>
-                    <input type="number" min="0" max="100" class="form-control" id="progress" value="{{progress}}" name="progress">
-                </div>
-                <div class="form-group">
-                    <label for="todoText">Text</label>
-                    <textarea id="todoText" class="form-control" name="todoText">{{todo.todo_text}}</textarea>
-                </div>
-                <input type="submit" value="Edit" class="btn btn-primary">
-            </form>
+<div class="container-md">
+    <div class="ContentWrapper">
+        <div class="Content">
+            {% if todo %}
+            <h3>Edit Todo</h3>
+            <div class="EditTodoForm">
+                <form action="{% url 'web:post_edit' todo.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="deadline">Deadline</label>
+                        <input type="date" class="form-control" id="deadline" value="{{deadline}}" name="deadline">
+                    </div>
+                    <div class="form-group">
+                        <label for="progress">Progress</label>
+                        <input type="number" min="0" max="100" class="form-control" id="progress" value="{{progress}}" name="progress">
+                    </div>
+                    <div class="form-group">
+                        <label for="todoText">Text</label>
+                        <textarea id="todoText" class="form-control" name="todoText">{{todo.todo_text}}</textarea>
+                    </div>
+                    <input type="submit" value="Edit" class="btn btn-primary">
+                </form>
+            </div>
+            {% else %}
+            <p>Todo not found</p>
+            {% endif %}
         </div>
-        {% else %}
-        <p>Todo not found</p>
-        {% endif %}
     </div>
 </div>
 </body>
