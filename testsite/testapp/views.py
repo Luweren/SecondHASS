@@ -20,15 +20,14 @@ def howto(response):
     
 def post_create(request):
     try:
-        todo = ToDo.objects.get(pk=todo_id)
-        todo.text = request.POST['todoText']
-        todo.progress = float(request.POST['progress'])
-        todo.deadline = request.POST['deadline']
+        todo = ToDoList.objects.get(id=3)
+        todo.item_set.create(text= request.POST['todoText'], deadline = request.POST['deadline'], progress = float(request.POST['progress']))
         todo.save()
         return HttpResponseRedirect(reverse('web:index'))
-    except (KeyError, Todo.DoesNotExist):
+    except (KeyError, ToDoList.DoesNotExist):
         # redirect anyway
         return HttpResponseRedirect(reverse('web:index'))
+        
 
 def edit(request, item_id):
     try:
