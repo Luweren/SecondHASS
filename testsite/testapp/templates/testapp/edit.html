@@ -22,11 +22,11 @@
                     </div>
                     <div class="form-group">
                         <label for="progress">Progress</label>
-                        <input type="number" min="0" max="100" class="form-control" id="progress" value="{{progress}}" name="progress">
+                        <input type="float" class="form-control" id="progress" value="{{progress}}" name="progress">
                     </div>
                     <div class="form-group">
                         <label for="todoText">Text</label>
-                        <textarea id="todoText" class="form-control" name="todoText">{{todo.todo_text}}</textarea>
+                        <textarea id="todoText" class="form-control" name="todoText">{{todo.text}}</textarea>
                     </div>
                     <input type="submit" value="Edit" class="btn btn-primary">
                 </form>

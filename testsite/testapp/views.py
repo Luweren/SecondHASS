@@ -21,7 +21,7 @@ def howto(response):
 def post_create(request):
     try:
         todo = ToDoList.objects.get(id=3)
-        todo.item_set.create(text= request.POST['todoText'], deadline = request.POST['deadline'], progress = float(request.POST['progress']))
+        todo.item_set.create(text= request.POST['todoText'], deadline = request.POST['deadline'], progress = float(request.POST['progress'].replace(",", ".")))
         todo.save()
         return HttpResponseRedirect(reverse('web:index'))
     except (KeyError, ToDoList.DoesNotExist):
@@ -40,7 +40,7 @@ def edit(request, item_id):
     except Item.DoesNotExist:
         context = {}
 
-    template = loader.get_template('web/edit.html')
+    template = loader.get_template('testapp/edit.html')
     return HttpResponse(template.render(context, request))
 
 
@@ -48,7 +48,7 @@ def post_edit(request, item_id):
     try:
         todo = Item.objects.get(pk=item_id)
         todo.text = request.POST['todoText']
-        todo.progress = request.POST['progress']
+        todo.progress = request.POST['progress'].replace(",", ".")
         todo.deadline = request.POST['deadline']
         todo.save()
         return HttpResponseRedirect(reverse('web:index'))
@@ -57,9 +57,9 @@ def post_edit(request, item_id):
         return HttpResponseRedirect(reverse('web:index'))
 
 
-def post_delete(request, todo_id):
+def post_delete(request, item_id):
     try:
-        todo = Item.objects.get(pk=todo_id)
+        todo = Item.objects.get(pk=item_id)
         todo.delete()
         return HttpResponseRedirect(reverse('web:index'))
     except Item.DoesNotExist:
