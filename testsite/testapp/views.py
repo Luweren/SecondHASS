@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import ToDoList, Item
+from django.template import loader
+from django.urls import reverse
 # Create your views here.
 
 def tables(response, id):
@@ -19,12 +21,49 @@ def howto(response):
 def post_create(request):
     try:
         todo = ToDo.objects.get(pk=todo_id)
-        todo.todo_text = request.POST['todoText']
+        todo.text = request.POST['todoText']
         todo.progress = float(request.POST['progress'])
         todo.deadline = request.POST['deadline']
         todo.save()
         return HttpResponseRedirect(reverse('web:index'))
     except (KeyError, Todo.DoesNotExist):
+        # redirect anyway
+        return HttpResponseRedirect(reverse('web:index'))
+
+def edit(request, item_id):
+    try:
+        todo = Item.objects.get(pk=item_id)
+        context = {
+            'todo': todo,
+            'progress': todo.progress,
+            'deadline': todo.deadline.strftime('%Y-%m-%d')
+        }
+    except Item.DoesNotExist:
+        context = {}
+
+    template = loader.get_template('web/edit.html')
+    return HttpResponse(template.render(context, request))
+
+
+def post_edit(request, item_id):
+    try:
+        todo = Item.objects.get(pk=item_id)
+        todo.text = request.POST['todoText']
+        todo.progress = request.POST['progress']
+        todo.deadline = request.POST['deadline']
+        todo.save()
+        return HttpResponseRedirect(reverse('web:index'))
+    except (KeyError, Item.DoesNotExist):
+        # redirect anyway
+        return HttpResponseRedirect(reverse('web:index'))
+
+
+def post_delete(request, todo_id):
+    try:
+        todo = Item.objects.get(pk=todo_id)
+        todo.delete()
+        return HttpResponseRedirect(reverse('web:index'))
+    except Item.DoesNotExist:
         # redirect anyway
         return HttpResponseRedirect(reverse('web:index'))
         
